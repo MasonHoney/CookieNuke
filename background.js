@@ -9,7 +9,14 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.alarms.onAlarm.addListener((alarm) => {
     console.log("Alarm triggered:", alarm.name)
     if (alarm.name === "clearCookiesAtNoon") {
-        clearAllCookies();
+        chrome.storage.sync.get("enabled", (data) => {
+            if (data.enabled) {
+                console.log("AutoNuke is enabled. Nuking Cookies...");
+                clearAllCookies();
+            } else {
+                console.log("AutoNuke disabled. Skipping Cookie Nuke.")
+            }
+        });
     }
 });
 
